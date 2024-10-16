@@ -11,11 +11,11 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @yield('style-css')
@@ -54,12 +54,14 @@
                             @endif
                         @else
                         <li class="nav-item">
+                            <a href="{{ route('map.index') }}" class="nav-link">Maps</a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('space.index') }}" class="nav-link">Spaces</a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('centre-point.index') }}" class="nav-link">Koordinat</a>
                         </li>
-                       
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
@@ -86,13 +88,13 @@
         <main class="py-4">
             @yield('content')
             @stack('javascript')
-             <script>
-        window.setTimeout(function() {
-            $(".alert").fadeTo(500, 0).slideUp(500, function() {
-                $(this).remove();
-            })
-        }, 3000)
-    </script>
+             {{-- <script>
+                window.setTimeout(function() {
+                    $(".alert").fadeTo(500, 0).slideUp(500, function() {
+                        $(this).remove();
+                    })
+                }, 3000)
+            </script> --}}
         </main>
     </div>
 </body>

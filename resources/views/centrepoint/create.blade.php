@@ -48,16 +48,11 @@
         crossorigin=""></script>
     <script>
         // Menambah attribut pada leaflet
-        var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            mbUrl =
-            'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZXJpcHJhdGFtYSIsImEiOiJjbGZubmdib3UwbnRxM3Bya3M1NGE4OHRsIn0.oxYqbBbaBwx0dHLguu5gOA';
+        var mbAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            mbUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
         // membuat beberapa layer untuk tampilan map diantaranya satelit, dark mode, street
             var satellite = L.tileLayer(mbUrl, {
-                id: 'mapbox/satellite-v9',
-                tileSize: 512,
-                zoomOffset: -1,
                 attribution: mbAttr
             }),
             dark = L.tileLayer(mbUrl, {
@@ -75,21 +70,21 @@
 
         // Membuat var map untuk instance object map ke dalam tag div yang mempunyai id map
         // menambahkan titik koordinat latitude dan longitude peta indonesia kedalam opsi center
-        // mengatur zoom map dan mengatur layer yang akan digunakan  
+        // mengatur zoom map dan mengatur layer yang akan digunakan
         var map = L.map('map', {
             center: [-0.789275,113.921327],
             zoom: 5,
-            layers: [streets]
+            layers: [satellite]
         });
 
         var baseLayers = {
             //"Grayscale": grayscale,
-            "Streets": streets,
+            // "Streets": streets,
             "Satellite" : satellite
         };
 
         var overlays = {
-            "Streets": streets,
+            // "Streets": streets,
             "Satellite": satellite,
         };
 

@@ -15,10 +15,10 @@
 @endsection
 
     {{-- Untuk form edit sama dengan form create yang membedakannya hanya route action yaitu update,
-    dan kita juga melakukan passing parameter mke route tersebut , 
-    method post kita ubah menjadi PUT 
-    
-    dan menambahkan value pada tiap-tiap tag input dengan varaibel $space lalu di ikuti nama field 
+    dan kita juga melakukan passing parameter mke route tersebut ,
+    method post kita ubah menjadi PUT
+
+    dan menambahkan value pada tiap-tiap tag input dengan varaibel $space lalu di ikuti nama field
     dari tabel space
     --}}
 
@@ -48,7 +48,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            
+
                             <div class="form-group mb-3">
                                 <label for="">Deskripsi</label>
                                 <textarea name="content" class="form-control @error('content')
@@ -134,7 +134,7 @@
         });
 
         var baseLayers = {
-            //"Grayscale": grayscale,
+            "Grayscale": dark,
             "Streets": streets,
             "Satellite": satellite
         };

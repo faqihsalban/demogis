@@ -15,7 +15,7 @@
 @endsection
 
 
-{{-- Pada view create.blade space ini kita kan menginput beberapa data yaitu 
+{{-- Pada view create.blade space ini kita kan menginput beberapa data yaitu
 nama space (tempat), deskripsi, gambar jika di perlukan, dan titik koordinat lokasi
 Untuk cdn yang kita muat disini hampir sama dengan form create pada file view create centrepoint
 
@@ -47,7 +47,7 @@ Untuk cdn yang kita muat disini hampir sama dengan form create pada file view cr
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            
+
                             <div class="form-group mb-3">
                                 <label for="">Deskripsi</label>
                                 <textarea name="content" class="form-control @error('content')
@@ -88,7 +88,7 @@ Untuk cdn yang kita muat disini hampir sama dengan form create pada file view cr
     <script>
 
         // fungsi ini akan berjalan ketika akan menambahkan gambar dimana fungsi ini
-        // akan membuat preview image sebelum kita simpan gambar tersebut.      
+        // akan membuat preview image sebelum kita simpan gambar tersebut.
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -106,15 +106,10 @@ Untuk cdn yang kita muat disini hampir sama dengan form create pada file view cr
             readURL(this);
         });
 
-        var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            mbUrl =
-            'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZXJpcHJhdGFtYSIsImEiOiJjbGZubmdib3UwbnRxM3Bya3M1NGE4OHRsIn0.oxYqbBbaBwx0dHLguu5gOA';
+        var mbAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            mbUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
         var satellite = L.tileLayer(mbUrl, {
-                id: 'mapbox/satellite-v9',
-                tileSize: 512,
-                zoomOffset: -1,
                 attribution: mbAttr
             }),
             dark = L.tileLayer(mbUrl, {
@@ -125,8 +120,6 @@ Untuk cdn yang kita muat disini hampir sama dengan form create pada file view cr
             }),
             streets = L.tileLayer(mbUrl, {
                 id: 'mapbox/streets-v11',
-                tileSize: 512,
-                zoomOffset: -1,
                 attribution: mbAttr
             });
 
@@ -137,7 +130,7 @@ Untuk cdn yang kita muat disini hampir sama dengan form create pada file view cr
             // centrepoint
             center: [{{ $centrepoint->location }}],
             zoom: 14,
-            layers: [streets]
+            layers: [satellite]
         });
 
         var baseLayers = {

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class DataController extends Controller
 {
-   
+
     public function centrepoint()
     {
         // Method ini untuk menampilkan data centrepoint atau koordinat
@@ -24,6 +24,18 @@ class DataController extends Controller
     }
 
     public function spaces()
+    {
+        // Method ini untuk menampilkan data dari tabel spaces
+        // ke dalam datatables kita juga menambahkan column untuk menampilkan button
+        // action
+        $spaces = Space::orderBy('created_at','DESC');
+        return datatables()->of($spaces)
+        ->addColumn('action','space.action')
+        ->addIndexColumn()
+        ->rawColumns(['action'])
+        ->toJson();
+    }
+    public function polygon()
     {
         // Method ini untuk menampilkan data dari tabel spaces
         // ke dalam datatables kita juga menambahkan column untuk menampilkan button

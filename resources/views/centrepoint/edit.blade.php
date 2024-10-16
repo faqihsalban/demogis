@@ -52,12 +52,10 @@
         integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
         crossorigin=""></script>
     <script>
-       
 
-        var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
-            'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            mbUrl =
-            'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZXJpcHJhdGFtYSIsImEiOiJjbGZubmdib3UwbnRxM3Bya3M1NGE4OHRsIn0.oxYqbBbaBwx0dHLguu5gOA';
+
+       var mbAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            mbUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
             var satellite = L.tileLayer(mbUrl, {
                 id: 'mapbox/satellite-v9',
@@ -99,7 +97,7 @@
         // untuk current location titik koordinatnya kita dapatkan dari data yang sudah kita input
         // ke tabel centre point. Di sini kita bisa mengubah nilainya dengan langkah yang sama saat
         // menambahkan titik koordinat untuk pertama kalinya.
-        
+
         var curLocation = [{{ $centrePoint->location }}];
         map.attributionControl.setPrefix(false);
 

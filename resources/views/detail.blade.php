@@ -72,31 +72,26 @@
             </div>
         </div>
     </div>
-    {{-- karena hanya akan menampilkan single data dari marker yang dipilih jadi kita tidak 
+    {{-- karena hanya akan menampilkan single data dari marker yang dipilih jadi kita tidak
     melakukan looping untuk halaman detail ini --}}
     <script>
         var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
             'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             mbUrl =
-            'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZXJpcHJhdGFtYSIsImEiOiJjbGZubmdib3UwbnRxM3Bya3M1NGE4OHRsIn0.oxYqbBbaBwx0dHLguu5gOA';
+            'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
-        var satellite = L.tileLayer(mbUrl, {
-                id: 'mapbox/satellite-v9',
-                tileSize: 512,
-                zoomOffset: -1,
-                attribution: mbAttr
+
+        var satellite = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                            maxZoom: 19,
+                            attribution: '© OpenStreetMap'
+                        }),
+            dark = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap Team hosted by OpenStreetMap France'
             }),
-            dark = L.tileLayer(mbUrl, {
-                id: 'mapbox/dark-v10',
-                tileSize: 512,
-                zoomOffset: -1,
-                attribution: mbAttr
-            }),
-            streets = L.tileLayer(mbUrl, {
-                id: 'mapbox/streets-v11',
-                tileSize: 512,
-                zoomOffset: -1,
-                attribution: mbAttr
+            streets = L.tileLayer('https://tile.openstreetmap.bzh/ca/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles courtesy of <a href="https://www.openstreetmap.cat" target="_blank">Breton OpenStreetMap Team</a>'
             });
 
 
