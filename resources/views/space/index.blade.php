@@ -5,7 +5,7 @@
 @endsection
 
 {{-- Untuk view index space  ini hampir sama dengan view index centrepoint dimana kita memuat cdn datatable
-css dan js yang membedakannya ada pada ajax server side di bagian push('javascript') yaitu pada route 
+css dan js yang membedakannya ada pada ajax server side di bagian push('javascript') yaitu pada route
 
 --}}
 @section('content')
@@ -16,7 +16,8 @@ css dan js yang membedakannya ada pada ajax server side di bagian push('javascri
                     <div class="card-header">{{ __('Lists Space') }}</div>
                     <div class="card-body">
                         <a href="{{ route('space.create') }}" class="btn btn-info btn-sm float-end mb-2">Tambah Data</a>
-                        
+                        <a href="{{ route('space.create-polygon') }}" class="btn btn-info btn-sm float-end mb-2">Tambah Data Polygon</a>
+
                         @if (session('success'))
                             <div class="alert alert-success" role="alert">
                                 {{ session('success') }}
@@ -56,7 +57,7 @@ css dan js yang membedakannya ada pada ajax server side di bagian push('javascri
                 responsive: true,
                 lengthChange: false,
                 autoWidth: false,
-                
+
                 // Route untuk menampilkan data space
                 ajax: '{{ route('data-space') }}',
                 columns: [{

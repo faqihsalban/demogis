@@ -37,6 +37,21 @@ class SpaceController extends Controller
         ]);
     }
 
+     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createPolygon()
+    {
+        // Memanggil model CentrePoint untuk mendapatkan data yang akan dikirimkan ke form create
+        // space
+        $centrepoint = CentrePoint::get()->first();
+        return view('space.create-polygon', [
+            'centrepoint' => $centrepoint,
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -63,11 +78,12 @@ class SpaceController extends Controller
         }
 
         // Memasukkan nilai untuk masing-masing field pada tabel space berdasarkan inputan dari
-        // form create 
+        // form create
         $spaces->name = $request->input('name');
         $spaces->slug = Str::slug($request->name, '-');
         $spaces->location = $request->input('location');
         $spaces->content = $request->input('content');
+        $spaces->polygon = json_decode($request->polygon);
 
         //return dd($spaces);
 
@@ -104,9 +120,16 @@ class SpaceController extends Controller
         // mencari data space yang dipilih berdasarkan id
         // kemudian menampilkan data tersebut ke form edit space
         $space = Space::findOrFail($space->id);
-        return view('space.edit', [
+        if ($space->type == 'marker') {
+            return view('space.edit', [
             'space' => $space
-        ]);
+            ]);
+        }else{
+            return view('space.edit-polygon', [
+                'space' => $space
+                ]);
+        }
+
     }
 
     /**
@@ -118,6 +141,7 @@ class SpaceController extends Controller
      */
     public function update(Request $request, Space $space)
     {
+        // return $request->all();
         // Menjalankan validasi
         $this->validate($request, [
             'name' => 'required',
@@ -131,11 +155,11 @@ class SpaceController extends Controller
         // jika gambar diganti hapus terlebuh dahulu gambar lama
         $space = Space::findOrFail($space->id);
         if ($request->hasFile('image')) {
-            
+
             if (File::exists("uploads/imgCover/" . $space->image)) {
                 File::delete("uploads/imgCover/" . $space->image);
             }
-            
+
             $file = $request->file("image");
             //$uploadFile = StoreImage::replace($space->image,$file->getRealPath(),$file->getClientOriginalName());
             $uploadFile = time() . '_' . $file->getClientOriginalName();
@@ -145,12 +169,14 @@ class SpaceController extends Controller
 
         // Lakukan Proses update data ke tabel space
         $space->update([
-            'name' => $request->name,
-            'location' => $request->location,
-            'content' => $request->content,
-            'slug' => Str::slug($request->name, '-'),
+            'name'      => $request->name,
+            'location'  => $request->location,
+            'content'   => $request->content,
+            'polygon'   => json_decode($request->polygon),
+            'slug'      => Str::slug($request->name, '-'),
         ]);
-       
+        return response()->json(['message' => 'success','data' => $space], 200);
+
         // redirect ke halaman index space
         if ($space) {
             return redirect()->route('space.index')->with('success', 'Data berhasil diupdate');

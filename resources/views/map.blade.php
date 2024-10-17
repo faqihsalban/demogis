@@ -59,39 +59,34 @@ integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" /
     var mbAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     mbUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
-    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap'
-    });
-
-    var osmHOT = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap Team hosted by OpenStreetMap France'
-    });
-
-    var osmCAT = L.tileLayer('https://tile.openstreetmap.bzh/ca/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles courtesy of <a href="https://www.openstreetmap.cat" target="_blank">Breton OpenStreetMap Team</a>'
-    });
+    var streets = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap Team hosted by OpenStreetMap France'
+        }),
+        clean = L.tileLayer('https://tile.openstreetmap.bzh/ca/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles courtesy of <a href="https://www.openstreetmap.cat" target="_blank">Breton OpenStreetMap Team</a>'
+        });
 
     //map
     var map = L.map('map', {
             center: [{{ $centrePoint->location }}],
-            zoom: 15,
-            layers: [osm]
+            zoom: 14,
+            layers: [streets]
         });
 
         var baseLayers = {
-            "Streets": osm,
-            "Satellite": osmHOT,
-            "Dark": osmCAT,
+            "Streets": streets,
+            "Clean": clean
         };
-    var overlays = {
-            "Streets": osm,
-            "Satellite": osmCAT,
-     };
 
-     
+        var overlays = {
+            'drawlayer': streets
+            // "Streets": streets,
+            // "Satellite": satellite,
+        };
+
+
    var arrMarker = [];
    var arrPolygon = [];
     // Menampilkan popup data ketika marker di klik
@@ -108,19 +103,21 @@ integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" /
 
     @foreach ($polygon as $item)
         arrPolygon.push("{{ $item->slug }}");
-        L.polygon({{ $item->polygon }})
-            .bindPopup(
+       var tempPolygon = L.geoJSON(@json($item->polygon));
+
+        tempPolygon.bindPopup(
                 "<div class='my-2'><img src='{{ $item->getImage() }}' class='img-fluid' width='700px'></div>" +
                 "<div class='my-2'><strong>Nama Space:</strong> <br>{{ $item->name }}</div>" +
                 "<div><a href='{{ route('map.show', $item->slug) }}' class='btn btn-outline-info btn-sm'>Detail Space</a></div>" +
                 "<div class='my-2'></div>"
             ).addTo(map);
+
     @endforeach
 
-    var    marker = L.layerGroup(arrMarker);
-    var    zone = L.layerGroup(arrPolygon);
+    // var    marker = L.layerGroup(arrMarker);
+    // var    zone = L.layerGroup(arrPolygon);
 
-    L.control.layers(baseMaps, overlays).addTo(map);
+    L.control.layers(baseLayers, overlays).addTo(map);
 
 
 

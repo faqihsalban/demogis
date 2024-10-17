@@ -10,6 +10,9 @@ class Space extends Model
     use HasFactory;
     protected $guarded = [];
 
+    protected $casts = [
+        'polygon' => 'object',
+    ];
 
     public function getImage()
     {
