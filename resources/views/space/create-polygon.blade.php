@@ -150,6 +150,7 @@
                 }
             }
         }));
+        map.addLayer(drawnItems);
 
         map.on(L.Draw.Event.CREATED, function (event) {
             var layer = event.layer;
