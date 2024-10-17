@@ -31,6 +31,8 @@ Untuk cdn yang kita muat disini hampir sama dengan form create pada file view cr
                         {{-- action form yang mengarah ke route space.store untuk proses penyimpanan data --}}
                         <form action="{{ route('space.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
+                            <input type="hidden" name="type" value="marker">
+
                             <div class="form-group mb-3">
                                 <label for="">Nama space</label>
                                 <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="">
