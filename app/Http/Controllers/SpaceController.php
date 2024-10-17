@@ -84,6 +84,7 @@ class SpaceController extends Controller
         $spaces->location = $request->input('location');
         $spaces->content = $request->input('content');
         $spaces->polygon = json_decode($request->polygon);
+        $spaces->type = $request->input('type');
 
         //return dd($spaces);
 
