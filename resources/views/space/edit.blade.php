@@ -29,7 +29,7 @@
                 <div class="card rounded">
                     <div class="card-header">Edit Space</div>
                     <div class="card-body">
-                        <form action="{{ route('space.update',$space) }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('space.update',$space) }}" method="post" enctype="multipart/form-data" id="edit-form">
                             @csrf
                             @method('PUT')
                             <div class="form-group mb-3">
@@ -159,5 +159,24 @@
             }
             loc.value = lat + "," + lng;
         });
+
+        $.ajax({
+            url: document.getElementById("edit-form").action,
+            type: 'POST',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (hasil) {
+                console.log(hasil);
+                alert('ok');
+            },
+            error: function (err) {
+                alert('ga ok');
+                console.log(err);
+            }
+        });
+
+
     </script>
 @endpush
