@@ -63,7 +63,7 @@ class SpaceController extends Controller
         // Lakukan validasi data
         $this->validate($request, [
             'name' => 'required',
-            'content' => 'required',
+            // 'content' => 'required',
             'image' => 'image|mimes:png,jpg,jpeg',
             'location' => 'required'
         ]);
@@ -146,7 +146,7 @@ class SpaceController extends Controller
         // Menjalankan validasi
         $this->validate($request, [
             'name' => 'required',
-            'content' => 'required',
+            // 'content' => 'required',
             'image' => 'image|mimes:png,jpg,jpeg',
             'location' => 'required'
         ]);
