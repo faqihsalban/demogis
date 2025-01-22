@@ -8,6 +8,10 @@ use App\Models\Space;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Shapefile\Shapefile;
+use Shapefile\ShapefileException;
+use Shapefile\ShapefileReader;
 
 class SpaceController extends Controller
 {
@@ -62,12 +66,52 @@ class SpaceController extends Controller
     {
         // Lakukan validasi data
         $this->validate($request, [
-            'name' => 'required',
+            // 'name' => 'required',
             // 'content' => 'required',
-            'image' => 'image|mimes:png,jpg,jpeg',
-            'location' => 'required'
+            // 'image' => 'image|mimes:png,jpg,jpeg',
+            // 'location' => 'required'
         ]);
+        $files = $request->file('shp_file');
+        if ($request->hasFile('files')) {
+            $fileName = pathinfo($files[0]->getClientOriginalName(), PATHINFO_FILENAME);
+            $arr_check = [
+                $fileName . ".dbf",
+                $fileName . ".prj",
+                $fileName . ".shp",
+                $fileName . ".shx",
+                $fileName . ".cpg"
+            ];
+            foreach ($files as $f) {
+                if (($key = array_search($f->getClientOriginalName(), $arr_check)) !== false) {
+                    unset($arr_check[$key]);
+                }
+            }
 
+            foreach ($files as $f) {
+                $f->storeAs('Shapefile/' . $fileName, $f->getClientOriginalName());
+            }
+            $path = "Shapefile/{$fileName}";
+            $name = explode('/', $path)[1] . ".shp";
+            try {
+                // Open Shapefile
+                $Shapefile = new ShapefileReader(storage_path("app/public/{$path}/{$name}"));
+
+                // Read all the records
+                while ($Geometry = $Shapefile->fetchRecord()) {
+                    // Skip the record if marked as "deleted"
+                    if ($Geometry->isDeleted()) {
+                        continue;
+                    }
+                    // Print Geometry as GeoJSON
+                return $polygon = ($Geometry->getGeoJSON(true, true));
+                }
+            } catch (ShapefileException $e) {
+                // Print detailed error information
+                echo "Error Type: " . $e->getErrorType()
+                    . "\nMessage: " . $e->getMessage()
+                    . "\nDetails: " . $e->getDetails();
+            }
+        }
         // melakukan pengecekan ketika ada file gambar yang akan di input
         $spaces = new Space();
         if ($request->hasFile('image')) {
@@ -76,7 +120,6 @@ class SpaceController extends Controller
             $file->move('uploads/imgCover/', $uploadFile);
             $spaces->image = $uploadFile;
         }
-
         // Memasukkan nilai untuk masing-masing field pada tabel space berdasarkan inputan dari
         // form create
         $spaces->name = $request->input('name');
@@ -85,6 +128,7 @@ class SpaceController extends Controller
         $spaces->content = $request->input('content');
         $spaces->polygon = json_decode($request->polygon);
         $spaces->type = $request->input('type');
+        $spaces->category = $request->input('category');
 
         //return dd($spaces);
 

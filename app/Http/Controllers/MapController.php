@@ -23,12 +23,18 @@ class MapController extends Controller
         $centrePoint = CentrePoint::get()->first();
         $spaces = Space::where('type','marker')->get();
         $polygon = Space::where('type','polygon')->get();
+        $batasDistrik = Space::where('type','polygon')->where('category','Batas Distrik')->get();
+        $fasilitas = Space::where('type','polygon')->where('category','Fasilitas')->get();
+        $pik2 = Space::where('type','polygon')->where('category','PIK 2')->get();
 
 
 
         return view('map',[
             'spaces' => $spaces,
             'polygon' => $polygon,
+            'batasDistrik' => $batasDistrik,
+            'fasilitas' => $fasilitas,
+            'pik2' => $pik2,
             'centrePoint' => $centrePoint
         ]);
     }

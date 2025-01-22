@@ -34,7 +34,14 @@
                             <input type="hidden" name="type" value="polygon">
                             @csrf
                             <div class="form-group mb-3">
-                                <label for="">Nama space</label>
+                                <label for="">Kategori</label>
+                                <input type="text" name="category" value="" class="form-control @error('category') is-invalid @enderror" id="">
+                                @error('category')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="">Nama</label>
                                 <input type="text" name="name" value="" class="form-control @error('name') is-invalid @enderror" id="">
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -67,6 +74,14 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="form-group mb-3">
+                                <label for="">SHP File</label><br>
+                                <input type="file" name="shp_file" class="form-control @error('shp_file') is-invalid @enderror"
+                                    id="shp_file" multiple>
+                                @error('shp_file')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                             <div id="map"></div>
                             <div class="form-group mt-3">
                                 <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
@@ -86,6 +101,7 @@
         crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/shpjs@latest/dist/shp.min.js"></script>
 
 
     <script>
@@ -161,38 +177,34 @@
 
         });
 
-        $("form#edit-form").submit(function(e) {
-            e.preventDefault();
-            var formData = new FormData(this);
-            var temppolygon = [];
-            drawData = drawnItems.toGeoJSON();
-            formData.append('polygon', JSON.stringify(drawData));
-            console.log(drawData);
+        // $("form#edit-form").submit(function(e) {
+            // e.preventDefault();
+            // var formData = new FormData(this);
+            // var temppolygon = [];
+            // drawData = drawnItems.toGeoJSON();
+            // formData.append('polygon', JSON.stringify(drawData));
+            // console.log(drawData);
 
+            // //ajax
+            // $.ajax({
+            //     url: document.getElementById("edit-form").action,
+            //     type: 'POST',
+            //     data: formData,
+            //     cache: false,
+            //     contentType: false,
+            //     processData: false,
+            //     success: function (hasil) {
+            //         console.log(hasil);
 
+            //         alert('ok');
+            //     },
+            //     error: function (err) {
+            //         alert('ga ok');
+            //         console.log(err);
+            //     }
+            // });
 
-
-
-            //ajax
-            $.ajax({
-                url: document.getElementById("edit-form").action,
-                type: 'POST',
-                data: formData,
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (hasil) {
-                    console.log(hasil);
-
-                    alert('ok');
-                },
-                error: function (err) {
-                    alert('ga ok');
-                    console.log(err);
-                }
-            });
-
-        });
+        // });
 
     </script>
 @endpush

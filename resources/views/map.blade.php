@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
 @section('style-css')
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.1/dist/leaflet.css"
 integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
@@ -19,12 +17,16 @@ integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" /
         margin: 0;
     }
     #map {
-        height: 40vw;
-        width: 100vw;
+        height: 90%;
+        width: 100%;
+        left: 0;
+        top: 10%;
+        overflow: hidden;
+        position: fixed;
     }
     .leaflet-container {
-        height: 400px;
-        width: 600px;
+        height: auto;
+        width: auto;
         max-width: 100%;
         max-height: 100%;
     }
@@ -34,15 +36,14 @@ integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" /
 @section('content')
 
 <div class="container">
-                <div class="card-header">{{ __('Dashboard') }}</div>
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                <div id="map"></div>
+    <div class="card-body">
+        <div class="card-title">{{ __('Dashboard') }}</div>
+        @if (session('status'))
+            <div class="alert alert-success" role="alert">
+                {{ session('status') }}
+            </div>
+        @endif
+        <div id="map"></div>
     </div>
 </div>
 
@@ -56,9 +57,6 @@ integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" /
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-search/3.0.9/leaflet-search.src.js"></script>
 
 <script>
-    var mbAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    mbUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-
     var streets = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap Team hosted by OpenStreetMap France'
@@ -74,54 +72,70 @@ integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" /
             zoom: 14,
             layers: [streets]
         });
-
         var baseLayers = {
             "Streets": streets,
             "Clean": clean
         };
+    var arrBatasDistrik = [];
+    var arrFasilitas = [];
+    var arrPik2 = [];
 
-        var overlays = {
-            'drawlayer': streets
-            // "Streets": streets,
-            // "Satellite": satellite,
+    // var arrMarker = [];
+    // var arrPolygon = [];
+    // Menampilkan popup data ketika marker di klik
+    // @foreach ($spaces as $item)
+    //     arrMarker.push("{{ $item->slug }}");
+    //     L.marker([{{ $item->location }}])
+    //         .bindPopup(
+    //             "<div class='my-2'><img src='{{ $item->getImage() }}' class='img-fluid' width='700px'></div>" +
+    //             "<div class='my-2'><strong>Nama Space:</strong> <br>{{ $item->name }}</div>" +
+    //             "<div><a href='{{ route('map.show', $item->slug) }}' class='btn btn-outline-info btn-sm'>Detail Space</a></div>" +
+    //             "<div class='my-2'></div>"
+    //         ).addTo(map);
+    // @endforeach
+
+    @foreach ($batasDistrik as $item)
+        arrBatasDistrik.push(L.geoJSON(@json($item->polygon)).setStyle({ color: 'green', fillOpacity: 0.6 }).bindPopup(
+                 "<div class='my-2'><img src='{{ $item->getImage() }}' class='img-fluid' width='700px'></div>" +
+                 "<div class='my-2'><strong>Nama Space:</strong> <br>{{ $item->name }}</div>" +
+                 "<div><a href='{{ route('map.show', $item->slug) }}' class='btn btn-outline-info btn-sm'>Detail Space</a></div>" +
+                 "<div class='my-2'></div>") ) ;
+    @endforeach
+    @foreach ($fasilitas as $item)
+        arrFasilitas.push(L.geoJSON(@json($item->polygon)).setStyle({ color: 'blue', fillOpacity: 0.6 }).bindPopup(
+                 "<div class='my-2'><img src='{{ $item->getImage() }}' class='img-fluid' width='700px'></div>" +
+                 "<div class='my-2'><strong>Nama Space:</strong> <br>{{ $item->name }}</div>" +
+                 "<div><a href='{{ route('map.show', $item->slug) }}' class='btn btn-outline-info btn-sm'>Detail Space</a></div>" +
+                 "<div class='my-2'></div>")) ;
+    @endforeach
+    @foreach ($pik2 as $item)
+        arrPik2.push(L.geoJSON(@json($item->polygon)).setStyle({ color: 'red', fillOpacity: 0.6 }).bindPopup(
+                 "<div class='my-2'><img src='{{ $item->getImage() }}' class='img-fluid' width='700px'></div>" +
+                 "<div class='my-2'><strong>Nama Space:</strong> <br>{{ $item->name }}</div>" +
+                 "<div><a href='{{ route('map.show', $item->slug) }}' class='btn btn-outline-info btn-sm'>Detail Space</a></div>" +
+                 "<div class='my-2'></div>")) ;
+    @endforeach
+     var batasDistrik = L.layerGroup(arrBatasDistrik);
+     var fasilitas = L.layerGroup(arrFasilitas);
+     var pik2 = L.layerGroup(arrPik2);
+    // var    zone = L.layerGroup(arrPolygon);
+    var overlays = {
+            'PIK 2': pik2,
+            'Batas Distrik': batasDistrik,
+            'Fasilitas': fasilitas,
+            // 'Green Area 2': batasDistrik,
+            // 'Green Area 3': batasDistrik,
+            // 'Landuse Komersil': batasDistrik,
+            // 'Landuse Resident': batasDistrik,
+            // 'Commercial': fasilitas,
+            // 'Ruko': fasilitas,
+            // 'Pasir Putih': fasilitas,
+            // 'Road': fasilitas,
+            // 'Toll Road': fasilitas,
+            // 'Canal': fasilitas
         };
 
-
-   var arrMarker = [];
-   var arrPolygon = [];
-    // Menampilkan popup data ketika marker di klik
-    @foreach ($spaces as $item)
-        arrMarker.push("{{ $item->slug }}");
-        L.marker([{{ $item->location }}])
-            .bindPopup(
-                "<div class='my-2'><img src='{{ $item->getImage() }}' class='img-fluid' width='700px'></div>" +
-                "<div class='my-2'><strong>Nama Space:</strong> <br>{{ $item->name }}</div>" +
-                "<div><a href='{{ route('map.show', $item->slug) }}' class='btn btn-outline-info btn-sm'>Detail Space</a></div>" +
-                "<div class='my-2'></div>"
-            ).addTo(map);
-    @endforeach
-
-    @foreach ($polygon as $item)
-        arrPolygon.push("{{ $item->slug }}");
-       var tempPolygon = L.geoJSON(@json($item->polygon));
-
-        tempPolygon.bindPopup(
-                "<div class='my-2'><img src='{{ $item->getImage() }}' class='img-fluid' width='700px'></div>" +
-                "<div class='my-2'><strong>Nama Space:</strong> <br>{{ $item->name }}</div>" +
-                "<div><a href='{{ route('map.show', $item->slug) }}' class='btn btn-outline-info btn-sm'>Detail Space</a></div>" +
-                "<div class='my-2'></div>"
-            ).addTo(map);
-
-    @endforeach
-
-    // var    marker = L.layerGroup(arrMarker);
-    // var    zone = L.layerGroup(arrPolygon);
-
     L.control.layers(baseLayers, overlays).addTo(map);
-
-
-
-
 
     var datas = [
         @foreach ($spaces as $key => $value)
@@ -145,25 +159,25 @@ integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" /
     map.addControl(controlSearch);
 
     // looping variabel datas utuk menampilkan data space ketika melakukan pencarian data
-    for (i in datas) {
+    // for (i in datas) {
 
-        var title = datas[i].title,
-            loc = datas[i].loc,
-            marker = new L.Marker(new L.latLng(loc), {
-                title: title
-            });
-        markersLayer.addLayer(marker);
+    //     var title = datas[i].title,
+    //         loc = datas[i].loc,
+    //         marker = new L.Marker(new L.latLng(loc), {
+    //             title: title
+    //         });
+    //     markersLayer.addLayer(marker);
 
         // melakukan looping data untuk memunculkan popup dari space yang dipilih
-        @foreach ($spaces as $item)
-            L.marker([{{ $item->location }}])
-                .bindPopup(
-                    "<div class='my-2'><img src='{{ $item->getImage() }}' class='img-fluid' width='700px'></div>" +
-                    "<div class='my-2'><strong>Nama Spot:</strong> <br>{{ $item->name }}</div>" +
-                    "<a href='{{ route('map.show', $item->slug) }}' class='btn btn-outline-info btn-sm'>Detail Spot</a></div>" +
-                    "<div class='my-2'></div>"
-                ).addTo(map);
-        @endforeach
+        // @foreach ($spaces as $item)
+        //     L.marker([{{ $item->location }}])
+        //         .bindPopup(
+        //             "<div class='my-2'><img src='{{ $item->getImage() }}' class='img-fluid' width='700px'></div>" +
+        //             "<div class='my-2'><strong>Nama Spot:</strong> <br>{{ $item->name }}</div>" +
+        //             "<a href='{{ route('map.show', $item->slug) }}' class='btn btn-outline-info btn-sm'>Detail Spot</a></div>" +
+        //             "<div class='my-2'></div>"
+        //         ).addTo(map);
+        // @endforeach
     }
 </script>
 @endpush

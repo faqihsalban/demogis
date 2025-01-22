@@ -28,7 +28,8 @@ css dan js yang membedakannya ada pada ajax server side di bagian push('javascri
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Nama Space</th>
+                                    <th>Kategori</th>
+                                    <th>Nama Layer</th>
                                     <th>Opsi</th>
                                 </tr>
                             <tbody></tbody>
@@ -64,6 +65,9 @@ css dan js yang membedakannya ada pada ajax server side di bagian push('javascri
                         data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'category'
                     },
                     {
                         data: 'name'

@@ -67,6 +67,14 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="form-group mb-3">
+                                <label for="">SHP File</label><br>
+                                <input type="file" name="shp_file" class="form-control @error('shp_file') is-invalid @enderror"
+                                    id="shp_file">
+                                @error('shp_file')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                             <div id="map"></div>
                             <div class="form-group mt-3">
                                 <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
@@ -92,15 +100,12 @@
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-
                 reader.onload = function(e) {
                     $('#previewImage').attr('src', e.target.result);
                 }
-
                 reader.readAsDataURL(input.files[0]);
             }
         }
-
         $("#image").change(function() {
             readURL(this);
         });
@@ -121,19 +126,15 @@
             zoom: 14,
             layers: [streets]
         });
-
         var baseLayers = {
             "Streets": streets,
             "Clean": clean
         };
-
         var overlays = {
-            'drawlayer': drawnItems
+            'This Layer': drawnItems
             // "Streets": streets,
             // "Satellite": satellite,
         };
-
-
         L.control.layers(baseLayers, overlays).addTo(map);
 
         // var curLocation = [{{ $space->location }}];
@@ -143,7 +144,6 @@
         //     draggable: 'true',
         // });
         map.addLayer(drawnItems);
-
 
         map.addControl(new L.Control.Draw({
             edit: {
