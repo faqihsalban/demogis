@@ -163,7 +163,7 @@
         map.on(L.Draw.Event.CREATED, function (event) {
             var layer = event.layer;
             drawnItems.addLayer(layer);
-            console.log(layer.toGeoJSON());
+            // console.log(layer.toGeoJSON());
         });
 
         $("form#edit-form").submit(function(e) {

@@ -24,6 +24,6 @@ class Space extends Model
             return asset('/uploads/imgCover/' . $this->image);
         }
 
-        return 'https://via.placeholder.com/500x500.png?text=No+Cover';
+        return asset('/images/placeholder.jpg/');
     }
 }

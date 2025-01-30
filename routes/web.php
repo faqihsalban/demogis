@@ -41,4 +41,3 @@ Route::resource('space',(SpaceController::class));
 Route::get('/centrepoint/data',[DataController::class,'centrepoint'])->name('centre-point.data');
 // Route::get('/categories/data',[DataController::class,'categories'])->name('data-category');
 Route::get('/spaces/data',[DataController::class,'spaces'])->name('data-space');
-Route::get('/polygon/data',[DataController::class,'polygon'])->name('data-space');

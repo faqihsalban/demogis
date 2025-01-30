@@ -53,28 +53,17 @@ css dan js yang membedakannya ada pada ajax server side di bagian push('javascri
     <script>
         $(function() {
             $('#dataSpaces').DataTable({
-                processing: true,
-                serverSide: true,
-                responsive: true,
-                lengthChange: false,
-                autoWidth: false,
-
+                "responsive": true,
+                "processing": true,
+                "serverSide": true,
+                "bInfo" : true,
                 // Route untuk menampilkan data space
-                ajax: '{{ route('data-space') }}',
-                columns: [{
-                        data: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'category'
-                    },
-                    {
-                        data: 'name'
-                    },
-                    {
-                        data: 'action'
-                    }
+                "ajax": '{{ route('data-space') }}',
+                "columns": [
+                    {   "data": 'id', },
+                    {   "data": 'category' },
+                    {   "data": 'name' },
+                    {   "data": "action", }
                 ]
             })
         })

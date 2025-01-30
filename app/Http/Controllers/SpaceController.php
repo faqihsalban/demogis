@@ -71,47 +71,7 @@ class SpaceController extends Controller
             // 'image' => 'image|mimes:png,jpg,jpeg',
             // 'location' => 'required'
         ]);
-        $files = $request->file('shp_file');
-        if ($request->hasFile('files')) {
-            $fileName = pathinfo($files[0]->getClientOriginalName(), PATHINFO_FILENAME);
-            $arr_check = [
-                $fileName . ".dbf",
-                $fileName . ".prj",
-                $fileName . ".shp",
-                $fileName . ".shx",
-                $fileName . ".cpg"
-            ];
-            foreach ($files as $f) {
-                if (($key = array_search($f->getClientOriginalName(), $arr_check)) !== false) {
-                    unset($arr_check[$key]);
-                }
-            }
 
-            foreach ($files as $f) {
-                $f->storeAs('Shapefile/' . $fileName, $f->getClientOriginalName());
-            }
-            $path = "Shapefile/{$fileName}";
-            $name = explode('/', $path)[1] . ".shp";
-            try {
-                // Open Shapefile
-                $Shapefile = new ShapefileReader(storage_path("app/public/{$path}/{$name}"));
-
-                // Read all the records
-                while ($Geometry = $Shapefile->fetchRecord()) {
-                    // Skip the record if marked as "deleted"
-                    if ($Geometry->isDeleted()) {
-                        continue;
-                    }
-                    // Print Geometry as GeoJSON
-                return $polygon = ($Geometry->getGeoJSON(true, true));
-                }
-            } catch (ShapefileException $e) {
-                // Print detailed error information
-                echo "Error Type: " . $e->getErrorType()
-                    . "\nMessage: " . $e->getMessage()
-                    . "\nDetails: " . $e->getDetails();
-            }
-        }
         // melakukan pengecekan ketika ada file gambar yang akan di input
         $spaces = new Space();
         if ($request->hasFile('image')) {
@@ -123,17 +83,17 @@ class SpaceController extends Controller
         // Memasukkan nilai untuk masing-masing field pada tabel space berdasarkan inputan dari
         // form create
         $spaces->name = $request->input('name');
-        $spaces->slug = Str::slug($request->name, '-');
+        $spaces->slug = Str::slug($request->category." ".$request->name, '-');
         $spaces->location = $request->input('location');
         $spaces->content = $request->input('content');
         $spaces->polygon = json_decode($request->polygon);
         $spaces->type = $request->input('type');
         $spaces->category = $request->input('category');
 
-        //return dd($spaces);
-
         // proses simpan data
         $spaces->save();
+
+        return response()->json(['message' => 'success','data' => $spaces], 200);
 
         // redirect ke halaman index space
         if ($spaces) {
@@ -223,11 +183,7 @@ class SpaceController extends Controller
         return response()->json(['message' => 'success','data' => $space], 200);
 
         // redirect ke halaman index space
-        if ($space) {
-            return redirect()->route('space.index')->with('success', 'Data berhasil diupdate');
-        } else {
-            return redirect()->route('space.index')->with('error', 'Data gagal diupdate');
-        }
+        return response('success', 'Data berhasil diupdate');
     }
 
     /**

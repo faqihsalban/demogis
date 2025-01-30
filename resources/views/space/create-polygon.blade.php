@@ -7,12 +7,11 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
     <style>
-
         #map {
             height: 500px;
         }
-
     </style>
+    {{-- <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet"/> --}}
 @endsection
 
     {{-- Untuk form edit sama dengan form create yang membedakannya hanya route action yaitu update,
@@ -35,7 +34,22 @@
                             @csrf
                             <div class="form-group mb-3">
                                 <label for="">Kategori</label>
-                                <input type="text" name="category" value="" class="form-control @error('category') is-invalid @enderror" id="">
+                                <select class="form-control" name="category" id="category">
+                                    <option value="PIK 2">PIK 2</option>
+                                    <option value="Batas Distrik">Batas Distrik</option>
+                                    <option value="Kanal">Kanal</option>
+                                    <option value="Jalan">Jalan</option>
+                                    <option value="Jalan Tol">Jalan Tol</option>
+                                    <option value="Komersial">Komersial</option>
+                                    <option value="Fasilitas">Fasilitas</option>
+                                    <option value="Ruko">Ruko</option>
+                                    <option value="Green Area 2">Green Area 2</option>
+                                    <option value="Green Area 3">Green Area 3</option>
+                                    <option value="Landuse Komersil">Landuse Komersil</option>
+                                    <option value="Landuse Residen">Landuse Residen</option>
+                                    <option value="Pasir Putih">Pasir Putih</option>
+                                </select>
+                                {{-- <input type="text" name="category" value="" class="form-control @error('category') is-invalid @enderror" id=""> --}}
                                 @error('category')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -59,7 +73,7 @@
 
                             <div class="form-group mb-3">
                                 <label for="">Deskripsi</label>
-                                <textarea name="content" class="form-control @error('content')
+                                <textarea id="deskripsi" name="content" class="form-control @error('content')
                                     is-invalid
                                 @enderror" id="" cols="30" rows="10" placeholder="Deskripsi"></textarea>
                                 @error('content')
@@ -74,11 +88,19 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="form-group mb-3">
+                            {{-- <div class="form-group mb-3">
                                 <label for="">SHP File</label><br>
                                 <input type="file" name="shp_file" class="form-control @error('shp_file') is-invalid @enderror"
                                     id="shp_file" multiple>
                                 @error('shp_file')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div> --}}
+                            <div class="form-group mb-3">
+                                <label for="">GEOJSON File</label><br>
+                                <input type="file" name="geojson_file" class="form-control @error('geojson_file') is-invalid @enderror"
+                                    id="geojson_file" >
+                                @error('geojson_file')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -102,7 +124,8 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script src="https://unpkg.com/shpjs@latest/dist/shp.min.js"></script>
-
+    {{-- <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script> --}}
+    <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
 
     <script>
         function readURL(input) {
@@ -116,10 +139,11 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
-
         $("#image").change(function() {
             readURL(this);
         });
+
+
 
         var streets = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -129,7 +153,7 @@
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles courtesy of <a href="https://www.openstreetmap.cat" target="_blank">Breton OpenStreetMap Team</a>'
         });
-         var drawnItems = new L.FeatureGroup();
+        var drawnItems = new L.FeatureGroup();
 
         var map = L.map('map', {
             center: [{{ $centrepoint->location }}],
@@ -177,34 +201,47 @@
 
         });
 
-        // $("form#edit-form").submit(function(e) {
-            // e.preventDefault();
-            // var formData = new FormData(this);
-            // var temppolygon = [];
-            // drawData = drawnItems.toGeoJSON();
-            // formData.append('polygon', JSON.stringify(drawData));
-            // console.log(drawData);
+        $("#geojson_file").change(function() {
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    // $('#deskripsi').val(JSON.parse(e.target.result));
+                    console.log(JSON.parse(e.target.result));
+                    drawnItems = L.geoJSON(JSON.parse(e.target.result)) ;
+                    map.addLayer(drawnItems);
+                    var centerpoint = drawnItems.getBounds().getCenter();
+                    $('#location').val(centerpoint.lat + "," + centerpoint.lng);
 
-            // //ajax
-            // $.ajax({
-            //     url: document.getElementById("edit-form").action,
-            //     type: 'POST',
-            //     data: formData,
-            //     cache: false,
-            //     contentType: false,
-            //     processData: false,
-            //     success: function (hasil) {
-            //         console.log(hasil);
+                }
+                hasil = reader.readAsText(this.files[0]);
 
-            //         alert('ok');
-            //     },
-            //     error: function (err) {
-            //         alert('ga ok');
-            //         console.log(err);
-            //     }
-            // });
-
-        // });
+            }
+        });
+        $("form#edit-form").submit(function(e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+            var temppolygon = [];
+            drawData = drawnItems.toGeoJSON();
+            formData.append('polygon', JSON.stringify(drawData));
+            console.log(drawData);
+            //ajax
+            $.ajax({
+                url: document.getElementById("edit-form").action,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (hasil) {
+                    // console.log(hasil);
+                    alert('ok');
+                },
+                error: function (err) {
+                    alert('ga ok');
+                    console.log(err);
+                }
+            });
+        });
 
     </script>
 @endpush

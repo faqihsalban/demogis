@@ -15,26 +15,46 @@ class MapController extends Controller
     public function index()
     {
 
+        // return   $data = Space::select("id","name","category","slug")->orderBy("id","DESC")->get();
+
         /**
          *  Pada method index kita mengambil single data dari tabel centrepoint
          *  Selanjutnya kita mengambil seluruh data dari tabel space untuk menampilkan marker yang akan
          *  kita gtampilkan pada view map.blade
          */
         $centrePoint = CentrePoint::get()->first();
-        $spaces = Space::where('type','marker')->get();
-        $polygon = Space::where('type','polygon')->get();
-        $batasDistrik = Space::where('type','polygon')->where('category','Batas Distrik')->get();
-        $fasilitas = Space::where('type','polygon')->where('category','Fasilitas')->get();
-        $pik2 = Space::where('type','polygon')->where('category','PIK 2')->get();
+        // $marker = Space::where('type','marker')->get();
+        $batasDistrik       = Space::where('type','polygon')->where('category','Batas Distrik')->get();
+        $fasilitas          = Space::where('type','polygon')->where('category','Fasilitas')->get();
+        $pik2               = Space::where('type','polygon')->where('category','PIK 2')->get();
+        $greenArea2         = Space::where('type','polygon')->where('category','PIK 2')->get();
+        $greenArea3         = Space::where('type','polygon')->where('category','PIK 2')->get();
+        $landuseKomersial   = Space::where('type','polygon')->where('category','PIK 2')->get();
+        $landuseResiden     = Space::where('type','polygon')->where('category','PIK 2')->get();
+        $komersial          = Space::where('type','polygon')->where('category','PIK 2')->get();
+        $ruko               = Space::where('type','polygon')->where('category','PIK 2')->get();
+        $pasirPutih         = Space::where('type','polygon')->where('category','PIK 2')->get();
+        $jalan    = Space::where('type','polygon')->where('category','PIK 2')->get();
+        $jalanToll          = Space::where('type','polygon')->where('category','PIK 2')->get();
+        $kanal              = Space::where('type','polygon')->where('category','PIK 2')->get();
 
 
 
         return view('map',[
-            'spaces' => $spaces,
-            'polygon' => $polygon,
+            // 'marker' => $marker,
+            'pik2' => $pik2,
             'batasDistrik' => $batasDistrik,
             'fasilitas' => $fasilitas,
-            'pik2' => $pik2,
+            'greenArea2' => $greenArea2,
+            'greenArea3' => $greenArea3,
+            'landuseKomersial' => $landuseKomersial,
+            'landuseResiden' => $landuseResiden,
+            'komersial' => $komersial,
+            'ruko' => $ruko,
+            'pasirPutih' => $pasirPutih,
+            'jalan' => $jalan,
+            'jalanToll' => $jalanToll,
+            'kanal' => $kanal,
             'centrePoint' => $centrePoint
         ]);
     }
