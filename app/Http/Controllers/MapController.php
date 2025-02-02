@@ -31,7 +31,7 @@ class MapController extends Controller
         $greenArea3         = Space::where('type','polygon')->where('category','PIK 2')->get();
         $landuseKomersial   = Space::where('type','polygon')->where('category','PIK 2')->get();
         $landuseResiden     = Space::where('type','polygon')->where('category','PIK 2')->get();
-        $komersial          = Space::where('type','polygon')->where('category','PIK 2')->get();
+        $komersial          = Space::where('type','polygon')->where('category','Komersial')->get();
         $ruko               = Space::where('type','polygon')->where('category','PIK 2')->get();
         $pasirPutih         = Space::where('type','polygon')->where('category','PIK 2')->get();
         $jalan    = Space::where('type','polygon')->where('category','PIK 2')->get();
