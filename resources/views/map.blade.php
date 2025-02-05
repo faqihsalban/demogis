@@ -63,6 +63,23 @@ integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" /
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-search/3.0.9/leaflet-search.src.js"></script>
 
 <script>
+    function processLayerGroup(groupLayer,item) {
+        groupLayer.push(L.geoJSON(item.polygon).setStyle({ color: item.color, fillOpacity: 0.6 }).bindPopup(
+                 "<div class='my-2'><img src='"+item.name+"' class='img-fluid' width='700px'></div>" +
+                 "<div class='my-2'><strong>Kategori :</strong> <br>"+item.category+"</div>" +
+                 "<div class='my-2'><strong>Nama Space:</strong> <br>"+item.name+"</div>" +
+                 "<div><a href='/map/"+item.slug+"' class='btn btn-outline-info btn-sm'>Detail Space</a></div>" +
+                 "<div class='my-2'></div>") ) ;
+        groupLayer.push(L.marker(L.geoJSON(item.polygon).getBounds().getCenter(), {
+                icon: L.divIcon({
+                    className: 'polygonLabel',
+                    html: `<strong>`+item.name+`</strong>`,
+                    iconSize: [0, 0]
+                })
+            }));
+    }
+
+
     var streets = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap contributors, Tiles style by Humanitarian OpenStreetMap Team hosted by OpenStreetMap France'
@@ -99,33 +116,61 @@ integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" /
     var arrJalanToll = [];
     var arrKanal = [];
 
-
     // Menampilkan popup data ketika marker di klik
     @foreach ($batasDistrik as $item)
-        arrBatasDistrik.push(L.geoJSON(@json($item->polygon)).setStyle({ color: 'green', fillOpacity: 0.6 }).bindPopup(
-                 "<div class='my-2'><img src='{{ $item->getImage() }}' class='img-fluid' width='700px'></div>" +
-                 "<div class='my-2'><strong>Kategori :</strong> <br>{{ $item->category }}</div>" +
-                 "<div class='my-2'><strong>Nama Space:</strong> <br>{{ $item->name }}</div>" +
-                 "<div><a href='{{ route('map.show', $item->slug) }}' class='btn btn-outline-info btn-sm'>Detail Space</a></div>" +
-                 "<div class='my-2'></div>") ) ;
+        var item = @json($item);
+        processLayerGroup(arrBatasDistrik,item);
     @endforeach
     @foreach ($fasilitas as $item)
-        arrFasilitas.push(L.geoJSON(@json($item->polygon)).setStyle({ color: 'blue', fillOpacity: 0.6 }).bindPopup(
-                 "<div class='my-2'><img src='{{ $item->getImage() }}' class='img-fluid' width='700px'></div>" +
-                 "<div class='my-2'><strong>Kategori :</strong> <br>{{ $item->category }}</div>" +
-                 "<div class='my-2'><strong>Nama Space:</strong> <br>{{ $item->name }}</div>" +
-                 "<div><a href='{{ route('map.show', $item->slug) }}' class='btn btn-outline-info btn-sm'>Detail Space</a></div>" +
-                 "<div class='my-2'></div>")) ;
+        var item = @json($item);
+        processLayerGroup(arrFasilitas,item);
     @endforeach
     @foreach ($pik2 as $item)
-        arrPik2.push(L.geoJSON(@json($item->polygon)).setStyle({ color: 'red', fillOpacity: 0.6 }).bindPopup(
-                 "<div class='my-2'><img src='{{ $item->getImage() }}' class='img-fluid' width='700px'></div>" +
-                 "<div class='my-2'><strong>Kategori :</strong> <br>{{ $item->category }}</div>" +
-                 "<div class='my-2'><strong>Nama Space:</strong> <br>{{ $item->name }}</div>" +
-                 "<div><a href='{{ route('map.show', $item->slug) }}' class='btn btn-outline-info btn-sm'>Detail Space</a></div>" +
-                 "<div class='my-2'></div>")) ;
+        var item = @json($item);
+        processLayerGroup(arrPik2,item);
+    @endforeach
+    @foreach ($greenArea2 as $item)
+        var item = @json($item);
+        processLayerGroup(arrGreenArea2,item);
+    @endforeach
+    @foreach ($greenArea3 as $item)
+        var item = @json($item);
+        processLayerGroup(arrGreenArea3,item);
+    @endforeach
+    @foreach ($landuseKomersial as $item)
+        var item = @json($item);
+        processLayerGroup(arrLanduseKomersial,item);
+    @endforeach
+    @foreach ($landuseResiden as $item)
+        var item = @json($item);
+        processLayerGroup(arrLanduseResiden,item);
+    @endforeach
+    @foreach ($komersial as $item)
+        var item = @json($item);
+        processLayerGroup(arrKomersial,item);
+    @endforeach
+    @foreach ($ruko as $item)
+        var item = @json($item);
+        processLayerGroup(arrRuko,item);
+    @endforeach
+    @foreach ($pasirPutih as $item)
+        var item = @json($item);
+        processLayerGroup(arrPasirPutih,item);
+    @endforeach
+    @foreach ($jalan as $item)
+        var item = @json($item);
+        processLayerGroup(arrJalan,item);
+    @endforeach
+    @foreach ($jalanToll as $item)
+        var item = @json($item);
+        processLayerGroup(arrJalanToll,item);
+    @endforeach
+    @foreach ($kanal as $item)
+        var item = @json($item);
+        processLayerGroup(arrKanal,item);
     @endforeach
 
+        // console.log(arrJalan);
 
     var pik2 = L.layerGroup(arrPik2);
     var batasDistrik = L.layerGroup(arrBatasDistrik);
@@ -140,6 +185,7 @@ integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" /
     var jalan = L.layerGroup(arrJalan);
     var jalanToll = L.layerGroup(arrJalanToll);
     var kanal = L.layerGroup(arrKanal);
+
     var overlays = {
         'PIK 2': pik2,
         'Batas Distrik': batasDistrik,
@@ -163,24 +209,20 @@ integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" /
     map.on("zoomend", function() {
     zoomlevel = map.getZoom();
     document.getElementById("zoomLevel").value = zoomlevel;
-    if (zoomlevel >= 16) {
-        if (map.hasLayer(fasilitas)) {
-            console.log("layer already added");
-        } else {
-            map.addLayer(fasilitas);
-        }
+    if (zoomlevel == 16) {
+        map.removeLayer(batasDistrik);
+        map.addLayer(fasilitas);
+        map.addLayer(komersial);
     }
-    
-    if (zoomlevel >= 15) {
+    if (zoomlevel == 15) {
         if (map.hasLayer(pik2)) {
             map.removeLayer(pik2);
         } else {
             console.log("no point layer active");
         }
         map.addLayer(batasDistrik);
-
     }
-    if (zoomlevel <= 14) {
+    if (zoomlevel == 14) {
         if (map.hasLayer(pik2)) {
             console.log("layer already added");
         } else {

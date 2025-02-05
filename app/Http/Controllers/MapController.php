@@ -27,16 +27,16 @@ class MapController extends Controller
         $batasDistrik       = Space::where('type','polygon')->where('category','Batas Distrik')->get();
         $fasilitas          = Space::where('type','polygon')->where('category','Fasilitas')->get();
         $pik2               = Space::where('type','polygon')->where('category','PIK 2')->get();
-        $greenArea2         = Space::where('type','polygon')->where('category','PIK 2')->get();
-        $greenArea3         = Space::where('type','polygon')->where('category','PIK 2')->get();
-        $landuseKomersial   = Space::where('type','polygon')->where('category','PIK 2')->get();
-        $landuseResiden     = Space::where('type','polygon')->where('category','PIK 2')->get();
+        $greenArea2         = Space::where('type','polygon')->where('category','Green Area 2')->get();
+        $greenArea3         = Space::where('type','polygon')->where('category','Green Area 3')->get();
+        $landuseKomersial   = Space::where('type','polygon')->where('category','Landuse Komersil')->get();
+        $landuseResiden     = Space::where('type','polygon')->where('category','Landuse Residen')->get();
         $komersial          = Space::where('type','polygon')->where('category','Komersial')->get();
-        $ruko               = Space::where('type','polygon')->where('category','PIK 2')->get();
-        $pasirPutih         = Space::where('type','polygon')->where('category','PIK 2')->get();
-        $jalan    = Space::where('type','polygon')->where('category','PIK 2')->get();
-        $jalanToll          = Space::where('type','polygon')->where('category','PIK 2')->get();
-        $kanal              = Space::where('type','polygon')->where('category','PIK 2')->get();
+        $ruko               = Space::where('type','polygon')->where('category','Ruko')->get();
+        $pasirPutih         = Space::where('type','polygon')->where('category','Pasir Putih')->get();
+        $jalan              = Space::where('type','polygon')->where('category','Jalan')->get();
+        $jalanToll          = Space::where('type','polygon')->where('category','Jalan Tol')->get();
+        $kanal              = Space::where('type','polygon')->where('category','Kanal')->get();
 
 
 
@@ -70,11 +70,10 @@ class MapController extends Controller
          */
         $centrePoint = CentrePoint::get()->first();
         $spaces = Space::where('slug',$slug)->first();
-        $polygon = Space::where('type','polygon')->where('slug',$slug)->first();
+        //  response($spaces);
         return view('detail',[
             'centrePoint' => $centrePoint,
             'spaces' => $spaces,
-            'polygon' => $polygon
         ]);
     }
 }
