@@ -1,61 +1,76 @@
 @extends('layouts.app')
 
-@section('style-css')
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.1/dist/leaflet.css"
-integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
-
-{{-- cdn leaflet search --}}
-<link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/leaflet-search/3.0.9/leaflet-search.min.css">
-
-<style>
-    html,
-    body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        margin: 0;
-    }
-    #map {
-        height: 80%;
-        width: 100%;
-        left: 0;
-        top: 20%;
-        overflow: hidden;
-        position: fixed;
-    }
-    .leaflet-container {
-        height: auto;
-        width: auto;
-        max-width: 100%;
-        max-height: 100%;
-    }
-</style>
-@endsection
+@push('style-css')
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.1/dist/leaflet.css" integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
+    {{-- cdn leaflet search --}}
+    <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/leaflet-search/3.0.9/leaflet-search.min.css">
+    <style>
+        #map {
+            height: 100%;
+            width: 100%;
+            left: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .leaflet-container {
+            height: auto;
+            width: auto;
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+@endpush
 
 @section('content')
+<main>
+    <!-- contact area start -->
+    <section class="tp-contact-inner-ptb">
+       <div class="container">
+          <div class="row">
+             <div class="col-lg-6">
+                <div class="tp-contact-inner-heading mb-30">
+                   <span class="tp-section-title-pre">FEEL FREE TO CONTACT WITH US</span>
+                   <h3 class="tp-section-title">Contact us we are we <br>
+                      around the world.</h3>
+                </div>
+             </div>
+             <div class="col-lg-6">
+                <div class="tp-contact-inner-item-box d-flex flex-wrap">
+                   <div class="tp-contact-inner-item">
+                      <span class="tp-contact-inner-item-title">Zoom Level</span>
+                        <input class="form-control" type="text" id="zoomLevel" readonly>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </section>
+    <!-- contact area end -->
 
-<div class="container">
-    <div class="card-body">
-        <div class="card-title">
-            Zoom Level :
-            <input type="text" id="zoomLevel">
-        </div>
-        @if (session('status'))
-            <div class="alert alert-success" role="alert">
-                {{ session('status') }}
-            </div>
-        @endif
 
-
-
-        <div id="map"></div>
+    <!-- map area start -->
+    <div class="tp-contact-map">
+       <div class="tp-contact-map-content" style="       height: 1000px;   " >
+            <div id="map"></div>
+       </div>
     </div>
-</div>
+    <!-- map area end -->
+</main>
 
 
-
-
+    {{-- <div class="container">
+        <div class="card-body">
+            <div class="card-title">
+                Zoom Level :
+                <input type="text" id="zoomLevel">
+            </div>
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
+        </div>
+    </div> --}}
 @endsection
 
 @push('javascript')

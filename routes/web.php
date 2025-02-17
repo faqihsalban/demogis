@@ -30,7 +30,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/map',[App\Http\Controllers\MapController::class,'index'])->name('map.index');
 Route::get('/map/{slug}',[App\Http\Controllers\MapController::class,'show'])->name('map.show');
 
-
 Route::get('spaces/create-polygon',[SpaceController::class,'createPolygon'])->name('space.create-polygon');
 
 
