@@ -11,7 +11,10 @@ use function PHPSTORM_META\type;
 
 class DataController extends Controller
 {
-
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function centrepoint()
     {
         // Method ini untuk menampilkan data centrepoint atau koordinat

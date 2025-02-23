@@ -94,8 +94,6 @@
         crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
-
-
     <script>
         function readURL(input) {
             if (input.files && input.files[0]) {
@@ -118,7 +116,6 @@
             maxZoom: 19,
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles courtesy of <a href="https://www.openstreetmap.cat" target="_blank">Breton OpenStreetMap Team</a>'
         });
-        // var drawnItems = new L.FeatureGroup();
 
         var drawnItems = L.geoJSON(@json($space->polygon)) ;
         var map = L.map('map', {
@@ -144,7 +141,6 @@
         //     draggable: 'true',
         // });
         map.addLayer(drawnItems);
-
         map.addControl(new L.Control.Draw({
             edit: {
                 featureGroup: drawnItems,
@@ -173,10 +169,7 @@
             drawData = drawnItems.toGeoJSON();
             formData.append('polygon', JSON.stringify(drawData));
             console.log(drawData);
-
-
             //ajax
-            // console.log(drawData);
             $.ajax({
                 url: document.getElementById("edit-form").action,
                 type: 'POST',
@@ -185,8 +178,6 @@
                 contentType: false,
                 processData: false,
                 success: function (hasil) {
-                    console.log(hasil);
-
                     alert('ok');
                 },
                 error: function (err) {

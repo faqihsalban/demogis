@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class CentrePointController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -102,7 +106,7 @@ class CentrePointController extends Controller
      */
     public function update(Request $request, CentrePoint $centrePoint)
     {
-        // setelah data centrepoint yang akan di edit sesuai 
+        // setelah data centrepoint yang akan di edit sesuai
         // maka jalankan proses update jika berhasil akan di redirect ke halaman index
         $centrePoint = CentrePoint::findOrFail($centrePoint->id);
         $centrePoint->location = $request->input('location');

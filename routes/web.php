@@ -25,18 +25,25 @@ Route::get('/',[App\Http\Controllers\MapController::class,'index'])->name('map.i
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/dashboard', [App\Http\Controllers\MapController::class, 'index'])->name('dashboard');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // Route::get('/home',[App\Http\Controllers\MapController::class,'index'])->name('map.index');
 Route::get('/map',[App\Http\Controllers\MapController::class,'index'])->name('map.index');
 Route::get('/map/{slug}',[App\Http\Controllers\MapController::class,'show'])->name('map.show');
 
-Route::get('spaces/create-polygon',[SpaceController::class,'createPolygon'])->name('space.create-polygon');
 
+
+Route::prefix('admin')->group(function () {
+
+    Route::get('/space/data',[DataController::class,'spaces'])->name('data-space');
+    Route::get('space/create-polygon',[SpaceController::class,'createPolygon'])->name('space.create-polygon');
+    Route::post('space/datatable', [SpaceController::class, 'datatable']);
+    Route::resource('space',(SpaceController::class));
+
+});
 
 Route::resource('centre-point',(CentrePointController::class));
 // Route::resource('category',(CategoryController::class));
-Route::resource('space',(SpaceController::class));
 
 Route::get('/centrepoint/data',[DataController::class,'centrepoint'])->name('centre-point.data');
 // Route::get('/categories/data',[DataController::class,'categories'])->name('data-category');
-Route::get('/spaces/data',[DataController::class,'spaces'])->name('data-space');

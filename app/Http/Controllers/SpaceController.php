@@ -15,6 +15,10 @@ use Shapefile\ShapefileReader;
 
 class SpaceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -118,22 +122,17 @@ class SpaceController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit(Space $space)
     {
         // mencari data space yang dipilih berdasarkan id
         // kemudian menampilkan data tersebut ke form edit space
         $space = Space::findOrFail($space->id);
-        if ($space->type == 'marker') {
-            return view('space.edit', [
+        return view('space.edit', [
             'space' => $space
             ]);
-        }else{
-            return view('space.edit-polygon', [
-                'space' => $space
-                ]);
-        }
+
 
     }
 
@@ -150,7 +149,6 @@ class SpaceController extends Controller
         // Menjalankan validasi
         $this->validate($request, [
             'name' => 'required',
-            // 'content' => 'required',
             'image' => 'image|mimes:png,jpg,jpeg',
             'location' => 'required'
         ]);
@@ -174,7 +172,9 @@ class SpaceController extends Controller
 
         // Lakukan Proses update data ke tabel space
         $space->update([
+            'category'      => $request->category,
             'name'      => $request->name,
+            'color'      => $request->color,
             'location'  => $request->location,
             'content'   => $request->content,
             'polygon'   => json_decode($request->polygon),
@@ -201,5 +201,65 @@ class SpaceController extends Controller
         }
         $space->delete();
         return redirect()->route('space.index');
+    }
+
+    public function datatable(Request $request)
+    {
+        // Method ini untuk menampilkan data dari tabel spaces
+        // ke dalam datatables kita juga menambahkan column untuk menampilkan button
+        // action
+        // $spaces = Space::select('id, name,category');
+        // return datatables()->of($spaces)
+        // ->addColumn('action','space.action')
+        // ->addIndexColumn()
+        // ->rawColumns(['action'])
+        // ->toJson();
+        //SETUP
+        $limit = $request->input('length');
+        $start = $request->input('start');
+        $order = $request->columns[$request->order[0]['column']]['data'];
+        $dir = $request->input('order.0.dir');
+        $totalData = Space::count();
+        $selectedColumm = ["id","name","category","slug","color","type"];
+        if(empty($request->input('search.value')))
+        {
+            //QUERI CUSTOM
+            $data = Space::select( $selectedColumm)->offset($start)->limit($limit)->orderBy($order,$dir)->get();
+            $totalFiltered = $totalData;
+        }
+        else {
+            $search = $request->input('search.value');
+            //QUERI CUSTOM
+            $data =  Space::select($selectedColumm)
+                ->where('name','ILIKE',"%{$search}%")
+                ->orWhere('category','ILIKE',"%{$search}%")
+                ->offset($start)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+
+            //QUERI CUSTOM
+            $totalFiltered = Space::where('name','ILIKE',"%{$search}%")
+            ->orWhere('category','ILIKE',"%{$search}%")->count();
+        }
+        $datas = [];
+        if(!empty($data))
+        {
+            foreach ($data as $key)
+            {
+                $nestedData = $key;
+                $nestedData['action'] = "<a href='".route('space.edit',$key->id)."' class='btn btn-warning btn-sm'>Edit</a>
+                                        <button href='".route('space.destroy',$key->id). "' class='btn btn-danger btn-sm' id='delete'>Hapus</button>";
+                $datas[] = $nestedData;
+            }
+        }
+        $json_data = array(
+            "draw"            => intval($request->input('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $datas
+        );
+        return json_encode($json_data);
+
     }
 }

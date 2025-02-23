@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app_front')
 
 @push('style-css')
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.1/dist/leaflet.css" integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14=" crossorigin="" />
@@ -18,14 +18,16 @@
             max-width: 100%;
             max-height: 100%;
         }
+        .polygonLabel{
+            color: black;
+            font-size: large;
+        }
     </style>
 @endpush
 
 @section('content')
-<main>
-    <!-- contact area start -->
     <section class="tp-contact-inner-ptb">
-       <div class="container">
+       <div class="container container-large ">
           <div class="row">
              <div class="col-lg-6">
                 <div class="tp-contact-inner-heading mb-30">
@@ -43,34 +45,22 @@
                 </div>
              </div>
           </div>
+          <div class="tp-contact-map">
+            <div class="tp-contact-map-content" style=" height: calc(100vh - 400px);" >
+                 <div id="map"></div>
+            </div>
+         </div>
        </div>
     </section>
-    <!-- contact area end -->
-
 
     <!-- map area start -->
-    <div class="tp-contact-map">
-       <div class="tp-contact-map-content" style="       height: 1000px;   " >
+    {{-- <div class="tp-contact-map">
+       <div class="tp-contact-map-content" style=" height: 1000px;   " >
             <div id="map"></div>
        </div>
-    </div>
-    <!-- map area end -->
-</main>
-
-
-    {{-- <div class="container">
-        <div class="card-body">
-            <div class="card-title">
-                Zoom Level :
-                <input type="text" id="zoomLevel">
-            </div>
-            @if (session('status'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('status') }}
-                </div>
-            @endif
-        </div>
     </div> --}}
+    <!-- map area end -->
+
 @endsection
 
 @push('javascript')
@@ -79,7 +69,7 @@
 
 <script>
     function processLayerGroup(groupLayer,item) {
-        groupLayer.push(L.geoJSON(item.polygon).setStyle({ color: item.color, fillOpacity: 0.6 }).bindPopup(
+        groupLayer.push(L.geoJSON(item.polygon).setStyle({ color: item.color, fillOpacity: 0.8 }).bindPopup(
                  "<div class='my-2'><img src='"+item.name+"' class='img-fluid' width='700px'></div>" +
                  "<div class='my-2'><strong>Kategori :</strong> <br>"+item.category+"</div>" +
                  "<div class='my-2'><strong>Nama Space:</strong> <br>"+item.name+"</div>" +
@@ -88,8 +78,8 @@
         groupLayer.push(L.marker(L.geoJSON(item.polygon).getBounds().getCenter(), {
                 icon: L.divIcon({
                     className: 'polygonLabel',
-                    html: `<strong>`+item.name+`</strong>`,
-                    iconSize: [0, 0]
+                    html: `<strong>`+item.category+ `-`+ item.name+`</strong>`,
+                    iconSize: [50, 10]
                 })
             }));
     }
