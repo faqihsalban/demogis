@@ -174,7 +174,7 @@
                        </div>
                     </div>
                     <div class="tp-property-details-box box-7 mb-30">
-                        <h3 class="tp-property-details-box-title">Floor plans</h3>
+                        <h3 class="tp-property-details-box-title">Detail Pictures</h3>
                         <div class="tp-property-details-plans d-flex justify-content-between align-items-center">
                            <div class="tp-property-details-plans-btn">
                               <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -244,7 +244,7 @@
                               </div>
                            </div>
                         </div>
-                        <h3 class="tp-property-details-box-title">Amenities</h3>
+                        <h3 class="tp-property-details-box-title">Features and Specification</h3>
                         <div class="tp-property-details-checking">
                            <div class="row">
                               <div class="col-12 col-md-6 col-lg-4">
@@ -335,7 +335,7 @@
                         </div>
                      </div>
                      <div class="tp-property-details-box box-6 mb-30">
-                        <h3 class="tp-property-details-box-title">Address</h3>
+                        <h3 class="tp-property-details-box-title">Maps</h3>
                         <div class="tp-property-details-maps-wrap">
                            <span><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                               <path d="M1.7168 5.83498V13.1325C1.7168 14.5575 2.7293 15.1425 3.9593 14.4375L5.7218 13.4325C6.1043 13.215 6.7418 13.1925 7.1393 13.395L11.0768 15.3675C11.4743 15.5625 12.1118 15.5475 12.4943 15.33L15.7418 13.47C16.1543 13.23 16.4993 12.645 16.4993 12.165V4.86748C16.4993 3.44248 15.4868 2.85748 14.2568 3.56248L12.4943 4.56748C12.1118 4.78498 11.4743 4.80748 11.0768 4.60498L7.1393 2.63998C6.7418 2.44498 6.1043 2.45998 5.7218 2.67748L2.4743 4.53748C2.0543 4.77748 1.7168 5.36248 1.7168 5.83498Z" stroke="#5758D6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>

@@ -20,7 +20,7 @@
         }
         .polygonLabel{
             color: black;
-            font-size: large;
+            font-size: medium;
         }
     </style>
 @endpush
@@ -29,14 +29,14 @@
     <section class="tp-contact-inner-ptb">
        <div class="container container-large ">
           <div class="row">
-             <div class="col-lg-6">
+             <div class="col-lg-8">
                 <div class="tp-contact-inner-heading mb-30">
                    <span class="tp-section-title-pre">FEEL FREE TO CONTACT WITH US</span>
-                   <h3 class="tp-section-title">Contact us we are we <br>
+                   <h3 class="tp-section-title">Contact us we are we
                       around the world.</h3>
                 </div>
              </div>
-             <div class="col-lg-6">
+             <div class="col-lg-4">
                 <div class="tp-contact-inner-item-box d-flex flex-wrap">
                    <div class="tp-contact-inner-item">
                       <span class="tp-contact-inner-item-title">Zoom Level</span>
@@ -46,7 +46,7 @@
              </div>
           </div>
           <div class="tp-contact-map">
-            <div class="tp-contact-map-content" style=" height: calc(100vh - 400px);" >
+            <div class="tp-contact-map-content" style=" height: calc(100vh - 250px);" >
                  <div id="map"></div>
             </div>
          </div>
@@ -68,9 +68,41 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-search/3.0.9/leaflet-search.src.js"></script>
 
 <script>
+    function clearLayer(map){
+        map.removeLayer(pik2);
+        map.removeLayer(batasDistrik);
+        map.removeLayer(fasilitas);
+        map.removeLayer(greenArea2);
+        map.removeLayer(greenArea3);
+        map.removeLayer(landuseKomersial);
+        map.removeLayer(landuseResiden);
+        map.removeLayer(komersial);
+        map.removeLayer(ruko);
+        map.removeLayer(pasirPutih);
+        map.removeLayer(jalan);
+        map.removeLayer(jalanToll);
+        map.removeLayer(kanal);
+    }
     function processLayerGroup(groupLayer,item) {
-        groupLayer.push(L.geoJSON(item.polygon).setStyle({ color: item.color, fillOpacity: 0.8 }).bindPopup(
-                 "<div class='my-2'><img src='"+item.name+"' class='img-fluid' width='700px'></div>" +
+        var layer =L.geoJSON(item.polygon).setStyle({ color: item.color, fillOpacity: 0.6 });
+        layer.on('mouseover', function(e) {
+            e.target.setStyle({
+                fillOpacity: 1,
+                fillColor : item.color,
+                color: 'black',
+                weight: 2,
+            });
+        });
+        layer.on('mouseout', function(e) {
+            e.target.setStyle({
+                fillOpacity: 0.6,
+                fillColor : item.color,
+                color: 'black',
+                weight: 1,
+            });
+        });
+        groupLayer.push(layer.bindPopup(
+
                  "<div class='my-2'><strong>Kategori :</strong> <br>"+item.category+"</div>" +
                  "<div class='my-2'><strong>Nama Space:</strong> <br>"+item.name+"</div>" +
                  "<div><a href='/map/"+item.slug+"' class='btn btn-outline-info btn-sm'>Detail Space</a></div>" +
@@ -79,7 +111,7 @@
                 icon: L.divIcon({
                     className: 'polygonLabel',
                     html: `<strong>`+item.category+ `-`+ item.name+`</strong>`,
-                    iconSize: [50, 10]
+                    iconSize: [30, 10]
                 })
             }));
     }
@@ -100,10 +132,11 @@
             zoom: 14,
             layers: [streets]
         });
-        var baseLayers = {
+    var baseLayers = {
             "Streets": streets,
             "Clean": clean
         };
+    L.control.scale().addTo(map);
     var zoomlevel = map.getZoom();
     document.getElementById("zoomLevel").value = zoomlevel;
 
@@ -212,33 +245,31 @@
     map.addLayer(pik2);
 
     map.on("zoomend", function() {
-    zoomlevel = map.getZoom();
-    document.getElementById("zoomLevel").value = zoomlevel;
-    if (zoomlevel == 16) {
-        map.removeLayer(batasDistrik);
-        map.addLayer(fasilitas);
-        map.addLayer(komersial);
-    }
-    if (zoomlevel == 15) {
-        if (map.hasLayer(pik2)) {
-            map.removeLayer(pik2);
-        } else {
-            console.log("no point layer active");
+        zoomlevel = map.getZoom();
+        document.getElementById("zoomLevel").value = zoomlevel;
+        clearLayer(map);
+        if (zoomlevel == 17) {
+            map.addLayer(fasilitas);
+            map.addLayer(greenArea2);
+            map.addLayer(greenArea3);
+            map.addLayer(komersial);
+            map.addLayer(ruko);
+        }else if (zoomlevel == 16) {
+            map.addLayer(landuseKomersial);
+            map.addLayer(landuseResiden);
+            map.addLayer(pasirPutih);
+            map.addLayer(jalan);
+            map.addLayer(kanal);
+        }else if (zoomlevel == 15) {
+            map.addLayer(batasDistrik);
+            map.addLayer(jalan);
+            map.addLayer(jalanToll);
+        }else if (zoomlevel == 14) {
+                map.addLayer(pik2);
         }
-        map.addLayer(batasDistrik);
-    }
-    if (zoomlevel == 14) {
-        if (map.hasLayer(pik2)) {
-            console.log("layer already added");
-        } else {
-            map.addLayer(pik2);
-            map.removeLayer(batasDistrik);
-            map.removeLayer(fasilitas);
-        }
-    }
 
-    console.log("Current Zoom Level = " + zoomlevel);
-});
+        console.log("Current Zoom Level = " + zoomlevel);
+    });
 
 
 

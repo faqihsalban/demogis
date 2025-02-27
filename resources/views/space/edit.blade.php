@@ -52,8 +52,7 @@
                 </div>
                 <div class="form-group mb-3">
                     <label class="form-label" for="color">Warna Layer</label><br>
-                    <input type="color" name="color" value="{{ $space->color }}" class="form-control-color" id="color">
-
+                    <input type="text" name="color" data-coloris class="" value="{{ $space->color }}" id="color">
                 </div>
                 <div class="form-group mb-3">
                     <label for="">Foto Space</label><br>
@@ -100,6 +99,7 @@
     <link rel="stylesheet" href="{{asset('admin/css/vendor/datatables.responsive.bootstrap4.min.css')}}" />
     <link rel="stylesheet" href="{{asset('admin/css/vendor/select2.min.css')}}" />
     <link rel="stylesheet" href="{{asset('admin/css/vendor/select2-bootstrap.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('admin/css/coloris.min.css')}}" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"  crossorigin="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
     <style>
@@ -112,12 +112,14 @@
         <script src="{{asset('admin/js/vendor/datatables.min.js')}}"></script>
         <script src="{{asset('admin/js/vendor/select2.full.js')}}"></script>
         <script src="{{asset('admin/js/tinymce/tinymce.min.js')}}" ></script>
+        <script src="{{asset('admin/js/coloris.min.js')}}" ></script>
         {{-- <script src="https://cdn.tiny.cloud/1/plwma52yu00x4tqlceirfxgbrjcl2k0djs5v0ph3cv8m8hv7/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script> --}}
 
         <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" crossorigin=""></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
         <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
         <script>
+
             $(document).ready(function () {
                 // tinymce.init({
                 //     selector: 'textarea',
@@ -129,7 +131,38 @@
                 });
                 $("#category").val("{{ $space->category }}").trigger('change');
                 // tinymce.get('content').setContent("{{ $space->content }}");
+                Coloris.setInstance('.instance1', {
+                    theme: 'pill',
+                    themeMode: 'dark',
+                    formatToggle: true,
+                    closeButton: true,
+                    clearButton: true,
+                    swatches: [
+                        '#067bc2',
+                        '#84bcda',
+                        '#80e377',
+                        '#ecc30b',
+                        '#f37748',
+                        '#d56062'
+                    ]
+                    });
             });
+            Coloris({
+                el: '.coloris',
+                swatches: [
+                    '#264653',
+                    '#2a9d8f',
+                    '#e1ff00',
+                    '#f4a261',
+                    '#e76f51',
+                    '#d62828',
+                    '#023e8a',
+                    '#0077b6',
+                    '#0096c7',
+                    '#00b4d8',
+                    '#48cae4'
+                ]
+                });
         </script>
          <script> </script>
         <script>

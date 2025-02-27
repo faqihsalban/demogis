@@ -471,7 +471,25 @@
         <link rel="stylesheet" href="{{asset('admin/css/vendor/bootstrap-float-label.min.css')}}" />
         <link rel="stylesheet" href="{{asset('admin/css/vendor/select2.min.css')}}" />
         <link rel="stylesheet" href="{{asset('admin/css/vendor/select2-bootstrap.min.css')}}" />
-
+        <style>
+                ul {
+                    margin: 20px;
+                }
+                .input-color {
+                    position: relative;
+                }
+                .input-color input {
+                    padding-left: 20px;
+                }
+                .input-color .color-box {
+                    width: 50%;
+                    height: 30px;
+                    display: inline-block;
+                    background-color: #ccc;
+                    left: 5px;
+                    top: 5px;
+                }
+            </style>
     @endpush
     @push('script')
         <script src="{{asset('admin/js/vendor/jquery.validate/jquery.validate.min.js')}}"></script>
@@ -507,7 +525,10 @@
                         {"data": "id"},
                         {"data": "category"},
                         {"data": "name"},
-                        {"data": "color"},
+                        {"data": "color",
+                        "render": function (data, type, full) {
+                            return `<div class="input-color"> <div class="color-box" style="background-color: `+ data +`;"></div> </div>`;
+                        }},
                         {"data": "type"},
                         {"data": "action"}
                     ],

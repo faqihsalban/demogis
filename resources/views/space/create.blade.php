@@ -51,9 +51,8 @@
                     @enderror
                 </div>
                 <div class="form-group mb-3">
-                    <label class="form-label" for="color">Warna</label><br>
-                    <input type="color" name="color" value="#563d7c" class="form-control-color" id="color">
-
+                    <label class="form-label" for="color">Warna Layer</label><br>
+                    <input type="text" name="color" data-coloris class="" value="#563d7c" id="color">
                 </div>
                 <div class="form-group mb-3">
                     <label for="">Foto space</label><br>
@@ -104,6 +103,8 @@
     <link rel="stylesheet" href="{{asset('admin/css/vendor/select2-bootstrap.min.css')}}" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"  crossorigin="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
+    <link rel="stylesheet" href="{{asset('admin/css/coloris.min.css')}}" />
+
 <style>
     #map {
         height: 500px;
@@ -118,6 +119,7 @@
         <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" crossorigin=""></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
         <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
+        <script src="{{asset('admin/js/coloris.min.js')}}" ></script>
 
 
         <script>
